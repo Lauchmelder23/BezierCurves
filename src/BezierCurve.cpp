@@ -5,10 +5,7 @@
 
 #include <SDL.h>
 
-Uint32 BinomCoeff(int n, int k)
-{
-	return (tgamma(n+1) / (tgamma(k+1) * tgammal(n-k+1)));
-}
+#define C(n, k) (tgamma(n+1) / (tgamma(k+1) * tgammal(n-k+1)))
 
 BezierCurve::BezierCurve()
 {
@@ -56,7 +53,7 @@ void BezierCurve::ConstructBezier(float resolution)
 
 	std::vector<Uint32> binoms;
 	for (int i = 0; i <= grade; i++)
-		binoms.push_back(BinomCoeff(grade, i));
+		binoms.push_back(C(grade, i));
 
 	SDL_FPoint vert;
 
