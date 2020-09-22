@@ -64,7 +64,7 @@ int main(int argc, char** argv)
 				if (currentCurve != nullptr)
 				{
 					currentCurve->SetPreviewVertex(mouseX, mouseY);
-					currentCurve->ConstructBezier(0.05);
+					currentCurve->ConstructBezier(0.01);
 				}
 				break;
 
@@ -117,10 +117,12 @@ void AddVertex(int x, int y, BezierCurve** curve)
 
 	(*curve)->AddVertex(x, y);
 
+	/*
 	if ((*curve)->GetVertexCount() == 4)
 	{
 		(*curve)->Confirm();
 		curves.push_back(*curve);
 		*curve = nullptr;
 	}
+	*/
 }

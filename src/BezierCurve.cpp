@@ -9,42 +9,50 @@
 
 BezierCurve::BezierCurve()
 {
-	vertices.fill(nullptr);
-	lines.fill(nullptr);
 }
 
 void BezierCurve::AddVertex(int x, int y)
 {
-	vertices[numVertices++] = new Vertex(x, y);
+	numVertices++;
+	if(numVertices != vertices.size())
+		vertices.push_back(new Vertex(x, y));
+	else
+	{
+		vertices.insert(vertices.end() - 1, new Vertex(x, y));
+	}
+
 	if (numVertices > 1)
-		lines[numLines++] = new Line(vertices[numVertices - 2], vertices[numVertices - 1]);
+		lines.push_back(new Line(vertices[numVertices - 2], vertices[numVertices - 1]));
 }
 
 void BezierCurve::Confirm()
 {
-	if (numLines > 1)
+	if (vertices.size() != numVertices)
 	{
-		lines[numLines] = new Line(vertices[numLines], vertices[0]);
-		numLines++;
+		delete vertices.back();
+		vertices.pop_back();
+	}
+
+	if (lines.size() > 1)
+	{
+		lines.push_back(new Line(vertices.back(), vertices[0]));
 	}
 
 	inProgress = false;
-	ConstructBezier(0.05);
+	ConstructBezier(0.01);
 }
 
 void BezierCurve::SetPreviewVertex(int x, int y)
 {
-	if (vertices[numVertices] == nullptr)
-		vertices[numVertices] = new Vertex(x, y, Vertex::Cursor);
+	if (numVertices == vertices.size())
+		vertices.push_back(new Vertex(x, y, Vertex::Cursor));
 	else
 		vertices[numVertices]->SetPos(x, y);
 }
 
 void BezierCurve::ConstructBezier(float resolution)
 {
-	int grade = numVertices - 1;
-	if (vertices[grade] != nullptr && inProgress)
-		grade++;
+	int grade = vertices.size() - 1;
 
 	if (grade < 1)
 		return;
@@ -78,8 +86,8 @@ void BezierCurve::Draw(SDL_Renderer* renderer)
 	for (int i = 0; i <  numVertices; i++)
 		vertices[i]->Draw(renderer);
 
-	for (int i = 0; i < numLines; i++)
-		lines[i]->Draw(renderer);
+	for (Line* line : lines)
+		line->Draw(renderer);
 
 	if (bezier.size() != 0)
 	{

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <array>
 #include <vector>
 
 #include "UI/Vertex.hpp"
@@ -29,9 +28,8 @@ public:
 
 private:
 	uint8_t numVertices = 0;
-	uint8_t numLines = 0;
-	std::array<Vertex*, 4> vertices;
-	std::array<Line*, 4> lines;
+	std::vector<Vertex*> vertices;
+	std::vector<Line*> lines;
 
 	std::vector<SDL_FPoint> bezier;
 
